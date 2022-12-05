@@ -8,7 +8,7 @@ screen=pygame.display.set_mode((W,H))
 FPS=60 #счетчик кадров в секунду
 clock=pygame.time.Clock() #object clock 
 
-font_path='mario_font.ttf'#путь до шрифта в переменную
+font_path='C:\Users\student\Downloads\Russo_One' #путь до шрифта в переменную
 font_large=pygame.font.Font(font_path,48)
 font_small=pygame.font.Font(font_path,24)
 
