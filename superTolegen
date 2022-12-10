@@ -22,13 +22,13 @@ ground_image=pygame.transform.scale(ground_image,(804,60)) #to make better quali
 GROUND_H=ground_image.get_height()
 
 enemy_image=pygame.image.load('goomba.png')
-enemy_image=pygame.transform.scale(ground_image,(100,40)) 
+enemy_image=pygame.transform.scale(enemy_image,(100,40)) 
 
 enemy_dead_image=pygame.image.load('goomba_dead.png')
-enemy_dead_image=pygame.transform.scale(ground_image,(100,40)) 
+enemy_dead_image=pygame.transform.scale(enemy_dead_image,(100,40)) 
 
 player_image=pygame.image.load('mario.png')
-player_image=pygame.transform.scale(ground_image,(80,80)) 
+player_image=pygame.transform.scale(player_image,(80,80)) 
 
 #creat a class to work with characters
 
