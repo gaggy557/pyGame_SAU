@@ -8,16 +8,31 @@ screen=pygame.display.set_mode((W,H))
 FPS=60 #счетчик кадров в секунду
 clock=pygame.time.Clock() #object clock 
 
-font_path='C:\Users\student\Downloads\Russo_One' #путь до шрифта в переменную
+font_path='mario_font.ttf' #путь до шрифта в переменную
 font_large=pygame.font.Font(font_path,48)
 font_small=pygame.font.Font(font_path,24)
 
 game_over=False
 retry_text=font_small.render('PRESS ANY KEY', True, (255,255,255))
 retry_rect=retry_text.get_rect() #прямоугольная область чтобы расположить текст
-retry_text.midtop=(W//2,H//2)
+retry_rect.midtop=(W//2,H//2)
+
+ground_image=pygame.image.load('ground.png')
+ground_image=pygame.transform.scale(ground_image,(804,60)) #to make better quality image
+GROUND_H=ground_image.get_height()
+
+enemy_image=pygame.image.load('goomba.png')
+enemy_image=pygame.transform.scale(ground_image,(100,40)) 
+
+enemy_dead_image=pygame.image.load('goomba_dead.png')
+enemy_dead_image=pygame.transform.scale(ground_image,(100,40)) 
+
+player_image=pygame.image.load('mario.png')
+player_image=pygame.transform.scale(ground_image,(80,80)) 
 
 #creat a class to work with characters
+
+
 class Entity:
   def __init__(self,image):
     self.image=image
@@ -45,10 +60,47 @@ class Entity:
     self.y_speed+=self.gravity
     self.rect.y+=self.y_speed
     
+    if self.is_dead:
+      if self.rect.top>H-GROUND_H:
+        self.is_out=True
+    else:
+      self.handle_input()
+      
+      if self.rect.bottom>H-GROUND_H:
+        self.is_grounded=True
+        self.y_speed=0
+        self.rect.bottom=H-GROUND_H
+    
   def draw(self, surface):
     surface.blit(self.image,self.rect)
- 
-entity=Entity(pygame.Surface((100,100)))
+    
+class Player(Entity):
+  def __init__(self):
+    super().__init__(player_image)
+   
+  def handle_input(self):
+    self.x_speed=0
+    
+    keys=pygame.key.get_pressed()
+    if keys[pygame.K_a]:
+      self.x_speed=-self.speed
+    elif keys[pygame.K_d]:
+      self.x_speed=self.speed
+    if self.is_grounded and keys[pygame.K_SPACE]:
+      self.is_grounded=False
+      self.jump()
+      
+  def respawn(self):
+    self.is_out=False
+    self.is_dead=False
+    self.rect.midbottom=(W//2,H-GROUND_H)
+      
+  def jump(self):
+    self.y_speed=self.jump_speed
+
+player=Player()
+score=0 
+      
  
 running=True #to check the running of code and use cycle in further operations and events
 while running:
@@ -60,10 +112,20 @@ while running:
   
   screen.fill((92,148,252))
   
-  entity.update()
-  entity.draw(screen)
+  screen.blit(ground_image,(0,H-GROUND_H))
   
+  score_text=font_large.render(str(score),True,(255,255,255))
+  score_rect=score_text.get_rect()
+  
+  if player.is_out:
+    score_rect.midbottom=(W//2,H//2)
+    
+    screen.blit(retry_text,retry_rect)
+  else:
+    player.update()
+    player.draw(screen)
+    
+    score_rect.midtop=(W//2,5)
+  screen.blit(score_text,score_rect)
   pygame.display.flip() #renew of screen
 quit() #exit the game
-
-      
